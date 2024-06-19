@@ -22,8 +22,7 @@ Monolith is built on the top of TensorFlow and supports batch/real-time training
 asdf local python 3.8.6
 python -m venv .venv
 . .venv/bin/activate
-pip install -U numpy wheel packaging requests opt_einsum
-pip install -U keras_preprocessing --no-deps
+pip install -r requirements.txt
 ```
 
 ### Bazel setup
