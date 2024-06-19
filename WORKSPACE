@@ -119,6 +119,11 @@ load("//monolith:tf_serving_workspace.bzl", "tf_serving_workspace")
 
 tf_serving_workspace()
 
+http_archive(
+    name = "com_google_protobuf",
+    strip_prefix = "protobuf-3.19.0",
+    urls = ["https://github.com/protocolbuffers/protobuf/archive/v3.19.0.tar.gz"],
+)
 
 load("@com_google_protobuf//:protobuf_deps.bzl", "protobuf_deps")
 
@@ -181,7 +186,6 @@ http_archive(
     sha256 = "658ba6191fa44c92280d4aa2c271b0f4fbc0e34d249578dd05e50e76d0e5efcc",
     strip_prefix = "lz4-1.9.2",
     urls = [
-        "https://storage.googleapis.com/mirror.tensorflow.org/github.com/lz4/lz4/archive/v1.9.2.tar.gz",
         "https://github.com/lz4/lz4/archive/v1.9.2.tar.gz",
     ],
 )
@@ -197,7 +201,6 @@ http_archive(
     sha256 = "f7fee59fdbf1286ec23ef0b35b2dfb41031c8727c90ced6435b8cf576f23a656",
     strip_prefix = "librdkafka-1.5.0",
     urls = [
-        "https://storage.googleapis.com/mirror.tensorflow.org/github.com/edenhill/librdkafka/archive/v1.5.0.tar.gz",
         "https://github.com/edenhill/librdkafka/archive/v1.5.0.tar.gz",
     ],
 )
