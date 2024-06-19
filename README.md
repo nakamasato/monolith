@@ -36,13 +36,10 @@ chmod +x "bazel-$BAZEL_VERSION-installer-darwin-x86_64.sh"
 export PATH="$PATH:$HOME/bin"
 ```
 
-### Build from source
+### Examples
 
-Demo
-
-```bash
-bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS
-```
+1. `native_training:demo`: `bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS` ⚠️ (Successfully started but encountered segmentation fault. not sure if it's due to the local env or the implemantation)
+1. `batch`: `bazel run //markdown/demo:demo_local_runner -- --training_type=batch`
 
 ### Demo and tutorials
 
