@@ -16,9 +16,7 @@ import json
 import unittest
 from unittest import mock
 
-import numpy as np
-from absl import logging
-from six.moves.http_client import OK
+from http.client import OK
 
 from monolith.native_training import consul
 

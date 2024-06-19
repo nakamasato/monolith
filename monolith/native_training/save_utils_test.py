@@ -31,7 +31,6 @@ from freezegun import freeze_time
 from unittest import mock
 import numpy as np
 import os
-import six
 import time
 
 import tensorflow as tf
@@ -192,7 +191,7 @@ class SaverTest(tf.test.TestCase):
               "v2": v2.saveable
           }, restore_sequentially=True)
       val = save.save(sess, save_path)
-      self.assertTrue(isinstance(val, six.string_types))
+      self.assertTrue(isinstance(val, str))
       self.assertEqual(save_path, val)
 
     # Start a second session.  In that session the parameter nodes
@@ -493,7 +492,7 @@ class SaverTest(tf.test.TestCase):
 
         # Save the initialized values in the file at "save_path"
         val = save.save(sess, save_path1)
-        self.assertTrue(isinstance(val, six.string_types))
+        self.assertTrue(isinstance(val, str))
         self.assertEqual(save_path1, val)
 
       self.assertEqual(tf.train.latest_checkpoint(save_dir1), save_path1)
@@ -560,7 +559,7 @@ class SaverTest(tf.test.TestCase):
 
       # Save the initialized values in the file at "save_path"
       val = save.save(sess, save_path)
-      self.assertTrue(isinstance(val, six.string_types))
+      self.assertTrue(isinstance(val, str))
       self.assertEqual(save_path, val)
 
       with self.cached_session() as sess:
@@ -647,7 +646,7 @@ class SaverTest(tf.test.TestCase):
 
       # Save the initialized values in the file at "save_path"
       val = save.save(sess, save_path)
-      self.assertTrue(isinstance(val, six.string_types))
+      self.assertTrue(isinstance(val, str))
       self.assertEqual(save_path, val)
 
     # Start a second session.  In that session the variables
@@ -1633,7 +1632,7 @@ class SaveRestoreWithVariableNameMap(tf.test.TestCase):
       # Save the initialized values in the file at "save_path"
       # Use a variable name map to set the saved tensor names
       val = save.save(sess, save_path)
-      self.assertTrue(isinstance(val, six.string_types))
+      self.assertTrue(isinstance(val, str))
       self.assertEqual(save_path, val)
 
       # Verify that the original names are not in the Saved file

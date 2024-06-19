@@ -33,7 +33,6 @@ from __future__ import print_function
 
 import copy
 import re
-import six
 from inspect import Parameter, signature
 
 import tensorflow as tf
@@ -91,7 +90,7 @@ class _Param(object):
       if isinstance(val, Params):
         return _SortedDict({k: GetRepr(v) for k, v in val.iter_params()})
       if isinstance(val, dict):
-        return _SortedDict({k: GetRepr(v) for k, v in six.iteritems(val)})
+        return _SortedDict({k: GetRepr(v) for k, v in val.items()})
       if isinstance(val, (list, tuple)) and not _is_named_tuple(val):
         # NB: this constructor signature works for tuples, but not namedtuples.
         return type(val)([GetRepr(v) for v in val])
@@ -105,7 +104,7 @@ class _Param(object):
     if isinstance(self._value, Params):
       # pylint: disable=protected-access
       value_str = self._value._to_string(nested_depth)
-    elif isinstance(self._value, six.string_types):
+    elif isinstance(self._value, str):
       return '%s%s: "%s"' % (nested_indent, self._name, self._value)
     else:
       value_str = str(GetRepr(self._value))
@@ -201,7 +200,7 @@ class Params(object):
     # Note: We use iteritems() below so as to sort by name.
     sorted_param_strs = [
         v.to_string(nested_depth + 1)
-        for (_, v) in sorted(six.iteritems(self._params))
+        for (_, v) in sorted(self._params.items())
     ]
     nested_indent = '  ' * nested_depth
     return '{\n%s\n%s}' % ('\n'.join(sorted_param_strs), nested_indent)
@@ -265,7 +264,7 @@ class Params(object):
     if self._immutable:
       raise TypeError('This Params instance is immutable.')
     assert name is not None and isinstance(
-        name, six.string_types) and (re.match('^[a-z][a-z0-9_]*$', name)
+        name, str) and (re.match('^[a-z][a-z0-9_]*$', name)
                                      is not None)
     if name in self._params:
       raise AttributeError('Parameter %s is already defined' % name)
@@ -315,7 +314,7 @@ class Params(object):
         """
     if self._immutable:
       raise TypeError('This Params instance is immutable: %s' % self)
-    for name, value in six.iteritems(kwargs):
+    for name, value in kwargs.items():
       # get nested param.
       param, key = self._get_nested(name)
       # Update the value associated with key.
@@ -371,7 +370,7 @@ class Params(object):
 
   def iter_params(self):
     """Pythonic dict-like iteration."""
-    for name, param in six.iteritems(self._params):
+    for name, param in self._params.items():
       yield (name, param.get())
 
 

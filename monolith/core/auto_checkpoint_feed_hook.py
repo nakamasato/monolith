@@ -33,8 +33,7 @@ from __future__ import print_function
 import threading
 import time
 import os
-from six.moves import queue as Queue  # pylint: disable=redefined-builtin
-from six.moves import xrange  # pylint: disable=redefined-builtin
+import queue
 
 import tensorflow.compat.v1 as tf
 from tensorflow.core.protobuf import config_pb2
@@ -73,7 +72,7 @@ class _OpQueueContext(object):
 
   def __init__(self, name, target, args):
     self._name = name
-    self._queue = Queue.Queue()
+    self._queue = queue.Queue()
     args = (self,) + args
     self._thread = threading.Thread(name=name, target=target, args=args)
     self._thread.daemon = True
@@ -249,7 +248,7 @@ class TPUInfeedOutfeedSessionWithEndOfStreamHandlingHook(
     with self._rendezvous.catch_errors(source='infeed', session=session):
       if self._run_infeed_loop_on_coordinator:
         for count, steps in enumerate(queue_ctx.read_iteration_counts()):
-          for i in xrange(steps):
+          for i in range(steps):
             tf.compat.v1.logging.debug('Infeed enqueue for iteration (%d, %d)',
                                        count, i)
             session.run(self._enqueue_ops)
@@ -265,7 +264,7 @@ class TPUInfeedOutfeedSessionWithEndOfStreamHandlingHook(
       stopping_signals = False
       for count, steps in enumerate(queue_ctx.read_iteration_counts()):
         step_counter = 0
-        for i in xrange(steps):
+        for i in range(steps):
           tf.compat.v1.logging.debug('Outfeed dequeue for iteration (%d, %d)',
                                      count, i)
           if step_counter % self._outfeed_every_n_steps == 0:
