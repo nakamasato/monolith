@@ -1,0 +1,9 @@
+certifi==2024.6.2
+charset-normalizer==3.3.2
+idna==3.7
+Keras-Preprocessing==1.1.2
+numpy==1.24.4
+opt-einsum==3.3.0
+packaging==24.1
+requests==2.32.3
+urllib3==2.2.2
