@@ -29,7 +29,11 @@ pip install -U keras_preprocessing --no-deps
 ### Bazel setup
 
 ```
-
+export BAZEL_VERSION=4.0.0
+curl -fLO "https://github.com/bazelbuild/bazel/releases/download/$BAZEL_VERSION/bazel-$BAZEL_VERSION-installer-darwin-x86_64.sh"
+chmod +x "bazel-$BAZEL_VERSION-installer-darwin-x86_64.sh"
+./bazel-$BAZEL_VERSION-installer-darwin-x86_64.sh --user
+export PATH="$PATH:$HOME/bin"
 ```
 
 ### Build from source
@@ -43,3 +47,11 @@ bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS
 ### Demo and tutorials
 
 There are a tutorial in [markdown/demo](markdown/demo) on how to run distributed async training, and few guides on how to use the `MonolithModel` API [here](markdown).
+
+## Tips
+
+When you encounter a problem and want to clean up the bazel cache, you can use the following command:
+
+```
+bazel clean --expunge
+```
