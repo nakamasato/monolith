@@ -38,8 +38,10 @@ export PATH="$PATH:$HOME/bin"
 
 ### Examples
 
-1. `native_training:demo`: `bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS` ⚠️ (Successfully started but encountered segmentation fault. not sure if it's due to the local env or the implemantation)
-1. `batch`: `bazel run //markdown/demo:demo_local_runner -- --training_type=batch`
+1. **native_training:demo**: `bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS` ⚠️ (segmentation fault)
+1. **batch**: `bazel run //markdown/demo:demo_local_runner -- --training_type=batch` ⚠️ (segmentation fault)
+1. **streaming**: todo
+1. **On Kubernetes**: todo
 
 ### Demo and tutorials
 
