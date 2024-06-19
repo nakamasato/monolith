@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import os, re, time
-import six, copy, time
+import copy, time
 from absl import logging, flags
 from inspect import signature
 import pickle
@@ -482,7 +482,7 @@ class GraphDefHelper(object):
                 dest_nodes: List[str],
                 source_nodes: Optional[List[str]] = None,
                 with_library: bool = True):
-    if isinstance(dest_nodes, six.string_types):
+    if isinstance(dest_nodes, str):
       raise TypeError("dest_nodes must be a list.")
 
     if source_nodes is not None:
@@ -575,7 +575,7 @@ class GraphDefHelper(object):
             target_type = data_type.lower().encode()
             val_attr.tensor.string_val[0] = target_type
           logging.info(f"[INFO] using input_pb_type {val_attr.tensor.string_val[0]}")
-          
+
           logging.info(f"[INFO] the pbdataset/input {node}")
 
     return_elements = tf.import_graph_def(sub_graph,

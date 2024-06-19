@@ -14,7 +14,7 @@
 
 from absl import logging, flags
 from enum import Enum
-import os, sys, six
+import os, sys
 import types
 import json
 from datetime import datetime, timedelta
@@ -470,9 +470,9 @@ class CompressType(Enum):
 
 @monolith_export
 class FilePBDataset(dataset_ops.DatasetSource):
-  """从标准输入/pb文件中读取序列化数据, 并将其反序列化存于TF的Variant类型中. 这样做的好处是可以直接对PB对象进行过滤与修改, 
+  """从标准输入/pb文件中读取序列化数据, 并将其反序列化存于TF的Variant类型中. 这样做的好处是可以直接对PB对象进行过滤与修改,
   不用等到parse以后. Monolith提供了一系列工具操作Variant变量, 如filter_by_fids, filter_by_value, negative_sample等
-  
+
   另外, InstanceReweightDataset/NegativeGenDataset 这些DataSet也可以直接作用于Variant
 
   Args:
@@ -480,11 +480,11 @@ class FilePBDataset(dataset_ops.DatasetSource):
     buffer_size (:obj:`int`): 读取文件时缓存大小, 默认100MB
     input_pb_type (:obj:`str`): 输入pb类型, 可以是example/example_batch/instance
     output_pb_type (:obj:`str`): 输入pb类型, 可以是example/instance/plaintext
-    
+
   Raises:
     TypeError: 如果有任何参数与类型不匹配, 则抛TypeError
     ValueError: 如果有任何值与期望不匹配, 则抛ValueError
-  
+
   """
 
   def __init__(
@@ -684,9 +684,9 @@ class DistributedFilePBDataset(dataset_ops.DatasetSource):
 @monolith_export
 class InstanceReweightDataset(dataset_ops.UnaryUnchangedStructureDataset):
   """样本重加权, 并根据action给样本打标签, 使用方式为 dataset.instance_reweight
-  
-  一个样本可能有多个action, 按`action_priority`, 找到最高优的action. 再用action找到对应的 `action:weight:label`, 
-  让样本重复weight次(也有可能是0次, 即删除样本), 然后给样本打上label指定的标签 
+
+  一个样本可能有多个action, 按`action_priority`, 找到最高优的action. 再用action找到对应的 `action:weight:label`,
+  让样本重复weight次(也有可能是0次, 即删除样本), 然后给样本打上label指定的标签
 
   Args:
     input_dataset (:obj:`dataset`): 输入数据集
@@ -694,13 +694,13 @@ class InstanceReweightDataset(dataset_ops.UnaryUnchangedStructureDataset):
     reweight (:obj:`str`): 基本单元是`action:weight:label`, 可以用逗号分隔多个基本单元
       1) action: 动作, 用int表示, 与业务相关, 如download, install, click, exposure等
       2) weight: 权重, 用int表示, 表示样本重复的次数
-      3) label: 标签, 一般用1/-1表示. 
+      3) label: 标签, 一般用1/-1表示.
     variant_type (:obj:`str`): 输入数据是variant类型的, 支持两种格式, instance/example
-    
+
   Raises:
     TypeError: 如果有任何参数与类型不匹配, 则抛TypeError
     ValueError: 如果有任何值与期望不匹配, 则抛ValueError
-  
+
   """
 
   def __init__(self,
@@ -739,8 +739,8 @@ class InstanceReweightDataset(dataset_ops.UnaryUnchangedStructureDataset):
 @monolith_export
 class NegativeGenDataset(dataset_ops.UnaryUnchangedStructureDataset):
   """负例生成. 有时, 样本中只有正例, 没有负例, 需要随机生成负例
-  
-  推荐系统中的样本通常是由user侧, item侧两部分组成. 这里的做法是: 
+
+  推荐系统中的样本通常是由user侧, item侧两部分组成. 这里的做法是:
     - 先收集每个样本的item侧信息, 生成一个item池子
     - item池子并不是平铺的, 而是按某个特征(channel_slot)分类组织的. 如果在同一个channel随机取item得到的是hard负例, 在其它channel中抽样得到的是easy负例
     - 并不是一开始就生成负例, 而是要等item池子积累到一定大小才开始生成负例
@@ -749,7 +749,7 @@ class NegativeGenDataset(dataset_ops.UnaryUnchangedStructureDataset):
     input_dataset (:obj:`dataset`): 输入数据集
     neg_num (:obj:`int`): 为一个正例生成`neg_num`个负例
     channel_feature (:obj:`string`): 用于当item分类的字段
-    per_channel (:obj:`bool`): 是否分类 
+    per_channel (:obj:`bool`): 是否分类
     start_num (:obj:`int`): 在item池子中积累多少个后才开始采样
     max_iten_num (:obj:`int`): 每一个channel最多收集多注个item
     item_features: (:obj:`List[str]`): item侧的特征名列表
@@ -760,7 +760,7 @@ class NegativeGenDataset(dataset_ops.UnaryUnchangedStructureDataset):
   Raises:
     TypeError: 如果有任何参数与类型不匹配, 则抛TypeError
     ValueError: 如果有任何值与期望不匹配, 则抛ValueError
-  
+
   """
 
   def __init__(self,
@@ -1332,7 +1332,7 @@ class KafkaDataset(dataset_ops.DatasetSource):
                             num_parallel_calls=tf.data.AUTOTUNE)
       '''
       '''
-      # step 4 
+      # step 4
       dataset = dataset.flat_map(lambda v: tf.data.Dataset.from_tensors(
           string_to_variant_with_transform(
               v.message,

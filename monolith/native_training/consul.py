@@ -24,7 +24,7 @@ import time
 import traceback
 from typing import Dict
 
-from six.moves.http_client import HTTPConnection
+from http.client import HTTPConnection
 
 
 class ConsulException(Exception):

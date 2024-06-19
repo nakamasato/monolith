@@ -21,7 +21,6 @@ import re
 import socket
 import types
 import threading
-import six
 from inspect import signature, Parameter
 from numpy.lib.arraysetops import isin
 

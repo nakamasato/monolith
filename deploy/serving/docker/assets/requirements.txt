@@ -85,7 +85,6 @@ ruamel.yaml==0.15.85
 scipy==0.14.0
 setuptools==44.0.0
 simplejson==3.11.1
-six==1.12.0
 SOAPpy==0.12.22
 sqlalchemy-migrate==0.12.0
 sqlalchemy==1.2.12

@@ -33,7 +33,6 @@ from __future__ import print_function
 
 import numpy as np
 import re
-import six
 
 _NAME_PATTERN = re.compile('[A-Za-z_][A-Za-z0-9_]*')
 
@@ -60,8 +59,8 @@ class NestedMap(dict):
   def __init__(self, *args, **kwargs):
     super(NestedMap, self).__init__(*args, **kwargs)
     for key in self.keys():
-      assert isinstance(key, six.string_types), (
-          'Key in a NestedMap has to be a six.string_types. Currently type: %s,'
+      assert isinstance(key, str), (
+          'Key in a NestedMap has to be a str. Currently type: %s,'
           ' value: %s' % (str(type(key)), str(key)))
       NestedMap.CheckKey(key)
       assert key not in NestedMap._RESERVED_KEYS, ('%s is a reserved key' % key)
@@ -69,8 +68,8 @@ class NestedMap(dict):
   def __setitem__(self, key, value):
     # Make sure key is a valid expression and is not one of the reserved
     # attributes.
-    assert isinstance(key, six.string_types), (
-        'Key in a NestedMap has to be a six.string_types. Currently type: %s, '
+    assert isinstance(key, str), (
+        'Key in a NestedMap has to be a str. Currently type: %s, '
         'value: %s' % (str(type(key)), str(key)))
     NestedMap.CheckKey(key)
     assert key not in NestedMap._RESERVED_KEYS, ('%s is a reserved key' % key)
@@ -109,7 +108,7 @@ class NestedMap(dict):
     """Converts every dict in nested structure 'x' to a NestedMap."""
     if isinstance(x, dict):
       res = NestedMap()
-      for k, v in six.iteritems(x):
+      for k, v in x.items():
         res[k] = NestedMap.FromNestedDict(v)
       return res
     elif isinstance(x, (list, tuple)):
@@ -120,7 +119,7 @@ class NestedMap(dict):
   @staticmethod
   def CheckKey(key):
     """Asserts that key is valid NestedMap key."""
-    if not (isinstance(key, six.string_types) and _NAME_PATTERN.match(key)):
+    if not (isinstance(key, str) and _NAME_PATTERN.match(key)):
       raise ValueError('Invalid NestedMap key \'{}\''.format(key))
 
   def GetItem(self, key):
