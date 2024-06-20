@@ -78,4 +78,9 @@ target/
 # go
 vendor/
 
+# python venv
 .venv
+
+# kafka
+kafka_2.13-2.8.1
+kafka_2.13-2.8.1.tgz

@@ -15,6 +15,8 @@ Monolith is built on the top of TensorFlow and supports batch/real-time training
 
 - Python 3.8.6
 - Bazel Version 4.0.0
+- Java: 1.8.0
+- Kafka: 2.13-2.8.1
 
 ### Python setup
 
@@ -38,9 +40,11 @@ export PATH="$PATH:$HOME/bin"
 ### Examples
 
 1. **native_training:demo**: `bazel run //monolith/native_training:demo --output_filter=IGNORE_LOGS` ⚠️ (segmentation fault)
-1. **batch**: `bazel run //markdown/demo:demo_local_runner -- --training_type=batch` ⚠️ (segmentation fault)
-1. **streaming**: todo
-1. **On Kubernetes**: todo
+1. [**batch**](markdown/demo/Batch.md): `bazel run //markdown/demo:demo_local_runner -- --training_type=batch` ⚠️ (segmentation fault)
+1. [**streaming**](markdown/demo/Stream.md): ❌ `static assertion failed due to requirement`
+1. **Kubernetes**:
+    1. [EKS](markdown/demo/AWS-EKS.md): todo
+    1. [GKE](markdown/demo/GCP-GKE.md): todo
 
 ### Demo and tutorials
 
