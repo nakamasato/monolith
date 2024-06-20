@@ -1,2 +1,2 @@
 #!/bin/bash
-export KAFKA_PATH=$HOME/kafka_2.13-2.8.1
+export KAFKA_PATH=${KAFKA_PATH:-$HOME/kafka_2.13-2.8.1}

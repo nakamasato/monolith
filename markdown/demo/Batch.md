@@ -19,9 +19,9 @@ class MovieRankingModel(MonolithModel):
     return dataset
 
   def model_fn(self, features, mode):
-    # features = 
+    # features =
     return EstimatorSpec(...)
-    
+
   def serving_input_receiver_fn(self):
     return tf.estimator.export.ServingInputReceiver({...})
 ```
@@ -30,14 +30,14 @@ A monolith model follows the above template. `input_fn` returns an instance of t
 
 ### Prepare the dataset
 
-We can use tfds to load dataset. Then, we select the features that we're going to use from the dataset, and do some preprocessing. In our case, we need to convert user ids and movie titles from strings to unique integer ids. 
+We can use tfds to load dataset. Then, we select the features that we're going to use from the dataset, and do some preprocessing. In our case, we need to convert user ids and movie titles from strings to unique integer ids.
 
 ```python
 def get_preprocessed_dataset(size='100k') -> tf.data.Dataset:
   ratings = tfds.load(f"movielens/{size}-ratings", split="train")
   # For simplicity, we map each movie_title and user_id to numbers
-  # by hashing. You can use other ways to number them to avoid 
-  # collision and better leverage Monolith's collision-free hash tables.  
+  # by hashing. You can use other ways to number them to avoid
+  # collision and better leverage Monolith's collision-free hash tables.
   max_b = (1 << 63) - 1
   return ratings.map(lambda x: {
     'mov': tf.strings.to_hash_bucket_fast([x['movie_title']], max_b),
@@ -48,7 +48,7 @@ def get_preprocessed_dataset(size='100k') -> tf.data.Dataset:
 
 ### Write input_fn for batch training
 
-To enable distributed training, our `input_fn` first shard the dataset according to total number of workers, then batch. Note that Monolith requires sparse features to be ragged tensors, so a .map(to_ragged) is required if this isn't the case. 
+To enable distributed training, our `input_fn` first shard the dataset according to total number of workers, then batch. Note that Monolith requires sparse features to be ragged tensors, so a .map(to_ragged) is required if this isn't the case.
 
 ```python
 def to_ragged(x):
@@ -68,7 +68,7 @@ def input_fn(self, mode):
     .map(to_ragged).prefetch(tf.data.AUTOTUNE)
 ```
 
-### Build the model 
+### Build the model
 
 ```python
 def model_fn(self, features, mode):
@@ -95,21 +95,21 @@ def model_fn(self, features, mode):
     label=label,
     pred=rank,
     head_name="rank",
-    loss=loss, 
+    loss=loss,
     optimizer=optimizer,
     classification=False
   )
 ```
 
-In `model_fn`, we use `self.create_embedding_feature_column(feature_name)` to declare a embedding table for each of the feature name that requires an embedding. In our case, they are `mov` and `uid`. Note that the these feature names must match what the `input_fn` provides. 
+In `model_fn`, we use `self.create_embedding_feature_column(feature_name)` to declare a embedding table for each of the feature name that requires an embedding. In our case, they are `mov` and `uid`. Note that the these feature names must match what the `input_fn` provides.
 
-Then, we use `self.lookup_embedding_slice` to lookup the embeddings at once. If your features require different embedding length, then you can use multiple calls to `self.lookup_embedding_slice`. The rest is straightforward and is identical to how you do it in native tensorflow in graph mode. 
+Then, we use `self.lookup_embedding_slice` to lookup the embeddings at once. If your features require different embedding length, then you can use multiple calls to `self.lookup_embedding_slice`. The rest is straightforward and is identical to how you do it in native tensorflow in graph mode.
 
-Finally, we return an `EstimatorSpec`. This `EstimatorSpec` is a wrapped version of `tf.estimator.EstimatorSpec` and thus has more fields. 
+Finally, we return an `EstimatorSpec`. This `EstimatorSpec` is a wrapped version of `tf.estimator.EstimatorSpec` and thus has more fields.
 
 ## Run distributed batch training locally
 
-There're multiple ways to setup a distributed training. In this tutorial, we'll use the parameter server (PS) training strategy. In this strategy, model weights are partitioned across PS, and workers read data and pull weights from PS and do training. 
+There're multiple ways to setup a distributed training. In this tutorial, we'll use the parameter server (PS) training strategy. In this strategy, model weights are partitioned across PS, and workers read data and pull weights from PS and do training.
 
 While we usually run distributed training on top of a job scheduler such as YARN and Kubernetes, it can be done locally too.
 
@@ -130,4 +130,3 @@ We provide a script for this: [demo_local_runner.py](./demo_local_runner.py). To
 ```bash
 bazel run //markdown/demo:demo_local_runner -- --training_type=batch
 ```
-
