@@ -1,12 +1,12 @@
 # Distributed async training on EKS
 
-To scale to multiple machines and handle failure recovery, we can utilize container orchestration frameworks such as yarn and kubernetes. Regradless what tool you use, as long as the `TF_CONFIG` environment variable is correctly set for each worker and ps, it will work just fine. 
+To scale to multiple machines and handle failure recovery, we can utilize container orchestration frameworks such as yarn and kubernetes. Regradless what tool you use, as long as the `TF_CONFIG` environment variable is correctly set for each worker and ps, it will work just fine.
 
-In this tutorial, we will show how to setup distributed training using kubernetes, kubeflow, and AWS's elastic kubernetes service (EKS). Kubeflow is used as the middleware that injects `TF_CONFIG` environment variable for each worker container. 
+In this tutorial, we will show how to setup distributed training using kubernetes, kubeflow, and AWS's elastic kubernetes service (EKS). Kubeflow is used as the middleware that injects `TF_CONFIG` environment variable for each worker container.
 
 ## Prerequisite
 
-Setup kubeflow on AWS by following the official guide. It will also help you to setup other tools such as aws cli and eksctl. Make sure to complete 
+Setup kubeflow on AWS by following the official guide. It will also help you to setup other tools such as aws cli and eksctl. Make sure to complete
 
 - Prerequisites
 - Create an EKS Cluster
@@ -21,16 +21,16 @@ TODO
 
 ## Write Spec and launch training
 
-If you have completed all the prerequisites, `kubectl` should be able to connect to your cluster on AWS. 
+If you have completed all the prerequisites, `kubectl` should be able to connect to your cluster on AWS.
 
-Now, create a spec file called `aws-tfjob.yaml`. 
+Now, create a spec file called `aws-tfjob.yaml`.
 
 ```yaml
 apiVersion: "kubeflow.org/v1"
 kind: "TFJob"
 metadata:
   name: "monolith-train"
-  namespace: kubeflow 
+  namespace: kubeflow
 spec:
   runPolicy:
     cleanPodPolicy: None
@@ -47,7 +47,7 @@ spec:
           containers:
             - name: tensorflow
               image: YOUR_IMAGE
-              args: 
+              args:
                 - --model_dir=/tmp/model
     PS:
       replicas: 4
@@ -64,7 +64,7 @@ spec:
                 - --model_dir=/tmp/model
 ```
 
-Then, launch training: 
+Then, launch training:
 
 ```bash
 kubectl apply -f aws-tfjob.yaml
@@ -79,4 +79,4 @@ kubectl --namespace kubeflow get pods
 kubectl --namespace kubeflow logs monolith-train-worker-0
 ```
 
-Of course, there are other middlewares built on top of kubeflow to better help you to keep track of the training progress. Monolith's compatibility with tensorflow means that tools that are built for tensorflow will likely work with Monolith too. 
+Of course, there are other middlewares built on top of kubeflow to better help you to keep track of the training progress. Monolith's compatibility with tensorflow means that tools that are built for tensorflow will likely work with Monolith too.
